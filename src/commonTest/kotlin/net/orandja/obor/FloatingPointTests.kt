@@ -1,6 +1,8 @@
 package net.orandja.obor
 
+import net.orandja.obor.data.CborFloat
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class FloatingPointTests {
     companion object {
@@ -57,5 +59,31 @@ class FloatingPointTests {
         assertTransformation("FA007FFFFF".hex(), 1.1754942106924411e-38)
         assertTransformation("FB0000000000000001".hex(), 5.0e-324)
         assertTransformation("FBFFEFFFFFFFFFFFFF".hex(), -1.7976931348623157e+308)
+        assertTransformation("FB7FEFFFFFFFFFFFFF".hex(), 1.7976931348623157e+308)
+    }
+
+    @Test
+    fun doubleSize(){
+        assertEquals(3, CborFloat(0.00006097555160522461).cborSize)
+        assertEquals(5, CborFloat(65536.0).cborSize)
+        assertEquals(9, CborFloat(1.7976931348623157e+308).cborSize)
+    }
+
+    @Test
+    fun describeFloat16(){
+        val desc = CborFloat(0.00006097555160522461).getObjectDescription()[0].meaning
+        assertEquals("float16(6.097555160522461E-5)", desc)
+    }
+
+    @Test
+    fun describeFloat32(){
+        val desc = CborFloat(3.4028234663852886e+38).getObjectDescription()[0].meaning
+        assertEquals("float32(3.4028234663852886E38)", desc)
+    }
+
+    @Test
+    fun describeFloat64(){
+        val desc = CborFloat(1.7976931348623157e+308).getObjectDescription()[0].meaning
+        assertEquals("float64(1.7976931348623157E308)", desc)
     }
 }

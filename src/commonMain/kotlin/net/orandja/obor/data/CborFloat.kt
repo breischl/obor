@@ -24,7 +24,7 @@ data class CborFloat(val value: Double) : CborObject(Kind.FLOAT) {
         return if (floatValue.toDouble().toRawBits() == value.toRawBits()) {
             val float16Bits = float32ToFloat16bits(floatValue)
             if (float16BitsToFloat32(float16Bits).toRawBits() == floatValue.toRawBits()) 3 else 5
-        } else 7
+        } else 9
     }
 
     override fun describe(
